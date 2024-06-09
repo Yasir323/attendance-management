@@ -16,4 +16,3 @@ class User(AbstractUser):
     role = models.CharField(max_length=16, choices=ROLE_CHOICES)
     age = models.IntegerField()
     department = models.CharField(max_length=16, choices=DEPARTMENT_CHOICES)
-    # TODO: Manager
