@@ -2,23 +2,27 @@ version: '3'
 
 services:
   db:
-    image: postgres
+    image: postgres:latest
     environment:
-      POSTGRES_DB: attendance_db
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5435:5432"  # Bind the container's port 5432 to host port 5433
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ["sh", "-c", "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"]
     volumes:
       - .:/app
     ports:
       - "8000:8000"
     depends_on:
       - db
+    env_file:
+      - .env
 
 volumes:
   postgres_data:
